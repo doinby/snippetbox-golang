@@ -11,8 +11,13 @@ import (
 func home(w http.ResponseWriter, r *http.Request) {
     w.Header().Add("Server", "Go")
 
+		files := []string{
+			"./ui/html/base.tmpl.html",
+			"./ui/html/pages/home.tmpl.html",
+		}
+
 		// read template file
-		ts, err := template.ParseFiles("./ui/html/pages/home.tmpl.html")
+		ts, err := template.ParseFiles(files...)
 
 		// server response
 		if err != nil {
@@ -22,7 +27,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// html response
-		err = ts.Execute(w, nil)
+		err = ts.ExecuteTemplate(w, "base", nil)
 		if err != nil {
 			log.Print(err.Error())
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
